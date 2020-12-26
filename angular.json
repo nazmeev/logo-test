@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "test-logo-bootstrap"
+    }
+  },
+  "defaultProject": "test-logo-bootstrap",
+  "cli": {
+    "analytics": false
+  }
 }

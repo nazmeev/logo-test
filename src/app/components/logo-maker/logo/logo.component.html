@@ -1,0 +1,43 @@
+
+<div class="container">
+  <div class="row justify-content-md-center">
+    <div class="col col-6 jumbotron mt-5">
+      <form [formGroup]="logoForm" (submit)="saveLogo()">
+        <h5>{{ formTitle }}</h5>
+        <div class="mb-3">
+            <label class="form-label">Text</label>
+            <input
+            type="text"
+            class="form-control"
+            placeholder="Enter text"
+            formControlName="text"
+            [ngClass]="text.dirty ? (text.invalid ? 'is-invalid' : 'is-valid') : ''"
+            />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Figure</label>
+            <select class="custom-select" formControlName="figure" 
+                [ngClass]="figure.dirty ? (figure.invalid ? 'is-invalid' : 'is-valid') : ''">
+                <option value="">Choose...</option>
+                <option value="circle">circle</option>
+                <option value="square">square</option>
+                <option value="triangle">triangle</option>
+              </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Font</label>
+            <select class="custom-select" formControlName="font"
+                [ngClass]="font.dirty ? (font.invalid ? 'is-invalid' : 'is-valid') : ''">
+                <option value="">Choose...</option>
+                <option *ngFor="let fontItem of fontsList" value="{{ fontItem }}">{{ fontItem }}</option>
+              </select>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">{{ btnName }}</button>
+        <a routerLink="/" class="btn btn-link float-right">Cancel</a>
+      </form>
+    </div>
+  </div>
+</div>
+
+
