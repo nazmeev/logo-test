@@ -23,6 +23,6 @@ export class TextCanvasComponent implements OnInit {
   }
 
   getFontCSS() {
-    return this.sanitizer.bypassSecurityTrustResourceUrl(this.link);
+    return this.sanitizer.bypassSecurityTrustResourceUrl(this.link)
   }
 }

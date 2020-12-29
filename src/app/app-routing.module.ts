@@ -6,7 +6,7 @@ const routes: Routes = [
     path: '',
     loadChildren: () => import('./components/logo-maker/logo-maker.module').then(m => m.LogoMakerModule)
   }
-];
+]
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

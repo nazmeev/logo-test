@@ -22,13 +22,13 @@ export class FigureCanvasComponent implements OnInit {
     switch (this.logo) {
       case 'triangle':
         this.canvasService.drawTriangle(this.ctx, 0, 0, 100, 100)
-      break;
+      break
       case 'square':
         this.canvasService.drawRect(this.ctx, 0, 0, 100, 100)
-      break;
+      break
       case 'circle':
-        this.canvasService.drawCircle(this.ctx, 75, 75, 50, 0, 2*Math.PI, false)
-      break;
+        this.canvasService.drawCircle(this.ctx, 50, 50, 50, 0, 2*Math.PI)
+      break
     }
   }
 

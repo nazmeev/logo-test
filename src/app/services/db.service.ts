@@ -16,12 +16,12 @@ export class DbService {
 		return this.firestore
 			.collection(table)
 			.add(data)
-			.then(docRef => ({ ...data, [primaryKey]: docRef.id }));
+			.then(docRef => ({ ...data, [primaryKey]: docRef.id }))
 	}
 	updateData(dataID: string, data: {}, table: string): Promise<void> {
-		return this.firestore.doc(`${table}/${dataID}`).update(data);
+		return this.firestore.doc(`${table}/${dataID}`).update(data)
 	}
 	getDataById(id: string, table: string): Observable<any> {
-		return this.firestore.collection(table).doc(id).valueChanges();
+		return this.firestore.collection(table).doc(id).valueChanges()
 	}
 }

@@ -10,12 +10,11 @@ import { FontsLink } from '../../../shared/enum/fontslink.enum';
   templateUrl: './logo.component.html'
 })
 export class LogoComponent implements OnInit {
-  logo: Logo
   logoId: string
   logoForm: FormGroup
   btnName: string
   formTitle: string
-  fontsList
+  fontsList: {}
 
   constructor(
     private router: Router,
@@ -35,8 +34,55 @@ export class LogoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.setTemplateVariables()
+    this.getLogo()
+  }
+
+  get text() {
+    return this.logoForm.get('text')
+  }
+  get figure() {
+    return this.logoForm.get('figure')
+  }
+  get font() {
+    return this.logoForm.get('font')
+  }
+
+  getLogo() {
+    this.dbService.getDataById(this.logoId, 'logos').subscribe(
+      resp => {
+        if (resp) {
+          this.logoForm.controls['text'].setValue(resp.text)
+          this.logoForm.controls['figure'].setValue(resp.figure)
+          this.logoForm.controls['font'].setValue(resp.font)
+        }
+      }
+    )
+  }
+  saveLogo() {
+    if (this.logoForm.status == "VALID") {
+      const saveData = this.logoForm.value as { text, figure, font }
+      this.logoId ? this.updateLogo(saveData) : this.createLogo(saveData)
+    }
+  }
+
+  updateLogo(data: Logo) {
+    this.dbService.updateData(this.logoId, data, 'logos').then(
+      () => this.redirectAlert('Updated', 'alert-success')
+    )
+  }
+  createLogo(data: Logo) {
+    this.dbService.createData('id', data, 'logos').then(
+      resp => {
+        this.dbService.updateData(resp['id'], resp, 'logos').then(
+          () => this.redirectAlert('Saved', 'alert-success')
+        )
+      }
+    )
+  }
+
+  setTemplateVariables() {
     if (this.logoId) {
-      this.getLogo()
       this.btnName = 'Update'
       this.formTitle = 'Change logo'
     } else {
@@ -45,52 +91,8 @@ export class LogoComponent implements OnInit {
     }
   }
 
-  get text() {
-    return this.logoForm.get('text');
-  }
-  get figure() {
-    return this.logoForm.get('figure');
-  }
-  get font() {
-    return this.logoForm.get('font');
-  }
-
-  getLogo() {
-    this.dbService.getDataById(this.logoId, 'logos').subscribe(
-      resp => {
-        this.logo = resp
-        this.logoForm.controls['text'].setValue(this.logo.text)
-        this.logoForm.controls['figure'].setValue(this.logo.figure)
-        this.logoForm.controls['font'].setValue(this.logo.font)
-      }
-    )
-  }
-  saveLogo() {
-    if (this.logoForm.status == "VALID") {
-      this.logoId ? this.updateLogo(this.logoForm.value) : this.createLogo(this.logoForm.value)
-    }
-  }
-
-  updateLogo(values) {
-    const { text, figure, font } = values
-    this.dbService.updateData(this.logoId, { text, figure, font }, 'logos').then(
-      () => {
-        const navigationExtras: NavigationExtras = { state: { data: 'Updated', type: 'alert-success' } }
-        this.router.navigate(['/'], navigationExtras)
-      }
-    )
-  }
-  createLogo(values) {
-    const { text, figure, font } = values
-    this.dbService.createData('id', { text, figure, font }, 'logos').then(
-      resp => {
-        this.dbService.updateData(resp['id'], resp, 'logos').then(
-          () => {
-            const navigationExtras: NavigationExtras = { state: { data: 'Saved', type: 'alert-success' } }
-            this.router.navigate(['/'], navigationExtras)
-          }
-        )
-      }
-    )
+  redirectAlert(alertText, alertType) {
+    const navigationExtras: NavigationExtras = { state: { data: alertText, type: alertType } }
+    this.router.navigate(['/'], navigationExtras)
   }
 }

@@ -17,8 +17,7 @@ export class LogosComponent implements OnInit {
     private router: Router,
     private messagesService: MessagesService
   ) {
-    const navigation = this.router.getCurrentNavigation()
-    const state = navigation.extras.state as { data: string, type: string }
+    const state = this.router.getCurrentNavigation().extras.state as { data: string, type: string }
     if(state) this.messagesService.sendMessage(state.data, state.type)
   }
 
@@ -28,11 +27,8 @@ export class LogosComponent implements OnInit {
 
   getList(){
     this.dbService.getAllData().subscribe(
-      data => {
-        this.logos = data
-      }
+      data => this.logos = data
     )
-
   }
 
 }
