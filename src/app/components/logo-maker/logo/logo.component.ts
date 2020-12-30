@@ -6,6 +6,7 @@ import { DbService } from '../../../services/db.service';
 import { FontsLink } from '../../../shared/enum/fontslink.enum';
 import { switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { RoutesLink } from '../../../shared/enum/routeslink.enum';
 
 @Component({
   selector: 'app-logo',
@@ -106,7 +107,7 @@ export class LogoComponent implements OnInit {
 
   redirectAlertVariables(alertText, alertType) {
     const navigationExtras: NavigationExtras = { state: { data: alertText, type: alertType } }
-    this.router.navigate(['/'], navigationExtras)
+    this.router.navigate([RoutesLink.main], navigationExtras)
   }
 
   getFontsList() {
