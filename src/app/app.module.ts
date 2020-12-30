@@ -7,12 +7,14 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';
 
-import { MessagesComponent } from './shared/components/messages/messages.component'
+import { MessagesComponent } from './shared/components/messages/messages.component';
+import { NotFoundComponent } from './shared/components/not-found/not-found.component'
 
 @NgModule({
   declarations: [
     AppComponent,
-    MessagesComponent
+    MessagesComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
