@@ -4,7 +4,16 @@ import { MessagesService } from '../../../services/messages.service';
 
 @Component({
   selector: 'app-messages',
-  templateUrl: './messages.component.html'
+  templateUrl: './messages.component.html',
+  styles: [
+    `
+    .alert{
+      position: fixed;
+      bottom: 0;
+      z-index:1;
+    }
+    `
+  ]
 })
 export class MessagesComponent{
 

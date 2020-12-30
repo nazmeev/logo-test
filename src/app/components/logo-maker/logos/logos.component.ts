@@ -26,8 +26,8 @@ export class LogosComponent implements OnInit {
 
   loadList(){
     this.dbService.getAllData('logos').subscribe(
-      data => {
-        this.logos = data
+      logos => {
+        this.logos = logos
         this.loaded = true
       }
     )
@@ -36,6 +36,14 @@ export class LogosComponent implements OnInit {
   initAlert(){
     const state = this.router.getCurrentNavigation().extras.state as { data: string, type: string }
     if(state) this.messagesService.sendMessage(state.data, state.type)
+  }
+
+  delete(id, name){
+    if(confirm("Are you sure to delete " + name)) {
+      this.dbService.deleteData(id, 'logos').then(
+        () => this.messagesService.sendMessage('Deleted', 'alert-success')
+      )
+    }
   }
 
 }

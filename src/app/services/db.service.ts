@@ -24,4 +24,7 @@ export class DbService {
 	getDataById(id: string, table: string): Observable<any> {
 		return this.firestore.collection(table).doc(id).valueChanges()
 	}
+	deleteData(dataID: string, table: string): Promise<void> {
+		return this.firestore.doc(`${table}/${dataID}`).delete();
+	}
 }

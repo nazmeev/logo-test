@@ -26,6 +26,7 @@
         </div>
         <div class="card-footer">
           <a class="btn" routerLink="/logo/{{ logo.id }}">Edit</a>
+          <button class="btn float-right text-danger" (click)="delete(logo.id, logo.name)">Remove</button>
         </div>
       </div>
     </div>

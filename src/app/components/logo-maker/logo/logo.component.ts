@@ -4,7 +4,7 @@ import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { Logo } from '../../../interfaces/logo.interface';
 import { DbService } from '../../../services/db.service';
 import { FontsLink } from '../../../shared/enum/fontslink.enum';
-import {switchMap} from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 @Component({
@@ -36,7 +36,7 @@ export class LogoComponent implements OnInit {
     this.loadData()
   }
 
-  initForm(){
+  initForm() {
     this.logoForm = this.formBuilder.group({
       text: ['', [Validators.required, Validators.maxLength(50)]],
       figure: ['', [Validators.required]],
@@ -53,7 +53,7 @@ export class LogoComponent implements OnInit {
     return this.logoForm.get('font')
   }
 
-  getLogoId(){
+  getLogoId() {
     this.route.params.subscribe(params => {
       this.logoId = params.id
     })
@@ -61,7 +61,7 @@ export class LogoComponent implements OnInit {
   loadData() {
     this.dbService.getDataById(this.logoId, 'logos').pipe(
       switchMap((logo: Logo) => {
-        this.setFormValues(logo)
+        if (logo) this.setFormValues(logo)
         return this.dbService.getAllData('figures')
       }),
       switchMap((figures: any) => {
@@ -109,12 +109,12 @@ export class LogoComponent implements OnInit {
     this.router.navigate(['/'], navigationExtras)
   }
 
-  getFontsList(){
+  getFontsList() {
     this.fontsList = Object.keys(FontsLink)
   }
-  setFormValues(logo){
+  setFormValues(logo) {
     this.logoForm.controls['text'].setValue(logo.text)
-          this.logoForm.controls['figure'].setValue(logo.figure)
-          this.logoForm.controls['font'].setValue(logo.font)
+    this.logoForm.controls['figure'].setValue(logo.figure)
+    this.logoForm.controls['font'].setValue(logo.font)
   }
 }
