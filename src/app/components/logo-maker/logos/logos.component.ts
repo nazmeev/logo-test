@@ -9,7 +9,7 @@ import { MessagesService } from '../../../services/messages.service';
   templateUrl: './logos.component.html'
 })
 export class LogosComponent implements OnInit {
-
+  loaded: boolean = false
   logos: Logo[]
 
   constructor(
@@ -17,18 +17,25 @@ export class LogosComponent implements OnInit {
     private router: Router,
     private messagesService: MessagesService
   ) {
-    const state = this.router.getCurrentNavigation().extras.state as { data: string, type: string }
-    if(state) this.messagesService.sendMessage(state.data, state.type)
+    this.initAlert()
   }
 
   ngOnInit(): void {
-    this.getList()
+    this.loadList()
   }
 
-  getList(){
-    this.dbService.getAllData().subscribe(
-      data => this.logos = data
+  loadList(){
+    this.dbService.getAllData('logos').subscribe(
+      data => {
+        this.logos = data
+        this.loaded = true
+      }
     )
+  }
+
+  initAlert(){
+    const state = this.router.getCurrentNavigation().extras.state as { data: string, type: string }
+    if(state) this.messagesService.sendMessage(state.data, state.type)
   }
 
 }

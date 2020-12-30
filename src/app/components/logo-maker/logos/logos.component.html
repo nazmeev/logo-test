@@ -1,21 +1,44 @@
-<div class="col mt-5">
-  <h3>List of logos <span  class="float-right"><a outline class="btn btn-primary" routerLink="/create">Create logo</a></span></h3>
-</div>
-<div class="row">
-  <div
-    class="col-lg-6 col-sm-12 mb-4 mt-4"
-    *ngFor="let logo of logos; let i = index"
-  >
-    <div class="card">
-      <div class="text-center p-3">
-        <app-figure-canvas [logo]="logo.figure"></app-figure-canvas>
-      </div>
-      <div class="card-body text-center">
-        <app-text-canvas [logoFont]="logo.font" [logoText]="logo.text"></app-text-canvas>
-      </div>
-      <div class="card-footer">
-        <a class="btn" routerLink="/logo/{{ logo.id }}">Edit</a>
+<div *ngIf="this.loaded; else containerNoLoaded">
+  <div class="col mt-5">
+    <h3>
+      List of logos
+      <span class="float-right"
+        ><a outline class="btn btn-primary" routerLink="/create"
+          >Create logo</a
+        ></span
+      >
+    </h3>
+  </div>
+  <div class="row">
+    <div
+      class="col-lg-6 col-sm-12 mb-4 mt-4"
+      *ngFor="let logo of logos; let i = index"
+    >
+      <div class="card">
+        <div class="text-center p-3">
+          <app-figure-canvas [logoFigure]="logo.figure"></app-figure-canvas>
+        </div>
+        <div class="card-body text-center">
+          <app-text-canvas
+            [logoFont]="logo.font"
+            [logoText]="logo.text"
+          ></app-text-canvas>
+        </div>
+        <div class="card-footer">
+          <a class="btn" routerLink="/logo/{{ logo.id }}">Edit</a>
+        </div>
       </div>
     </div>
   </div>
 </div>
+
+<ng-template #containerNoLoaded>
+  <div class="card mt-5">
+    <div class="card-header">
+      Loading...
+    </div>
+    <div class="card-body text-center">
+      <div class="spinner-border"></div>
+    </div>
+  </div>
+</ng-template>

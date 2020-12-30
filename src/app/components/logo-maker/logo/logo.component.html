@@ -1,5 +1,5 @@
 
-<div class="container">
+<div class="container" *ngIf="this.loaded; else containerNoLoaded">
   <div class="row justify-content-md-center">
     <div class="col col-6 jumbotron mt-5">
       <form [formGroup]="logoForm" (submit)="saveLogo()">
@@ -19,9 +19,7 @@
             <select class="custom-select" formControlName="figure" 
                 [ngClass]="figure.dirty ? (figure.invalid ? 'is-invalid' : 'is-valid') : ''">
                 <option value="">Choose...</option>
-                <option value="circle">circle</option>
-                <option value="square">square</option>
-                <option value="triangle">triangle</option>
+                <option *ngFor="let figureItem of figures" value="{{ figureItem.name }}">{{ figureItem.name }}</option>
               </select>
         </div>
         <div class="mb-3">
@@ -39,5 +37,16 @@
     </div>
   </div>
 </div>
+
+<ng-template #containerNoLoaded>
+  <div class="card mt-5">
+    <div class="card-header">
+      Loading...
+    </div>
+    <div class="card-body text-center">
+      <div class="spinner-border"></div>
+    </div>
+  </div>
+</ng-template>
 
 

@@ -7,8 +7,9 @@ import { FigureCanvasService } from '../../../services/figure-canvas.service';
   styleUrls: ['./figure-canvas.component.scss']
 })
 export class FigureCanvasComponent implements OnInit {
+  figureColor: string = '#F84F43'
 
-  @Input() logo: string
+  @Input() logoFigure: string
   @ViewChild('figureCanvas', { static: true })
 
   figureCanvas: ElementRef<HTMLCanvasElement>
@@ -18,16 +19,20 @@ export class FigureCanvasComponent implements OnInit {
 
   ngOnInit(): void {
     this.ctx = this.figureCanvas.nativeElement.getContext('2d')
-    this.ctx.fillStyle = '#F84F43'
-    switch (this.logo) {
+    this.ctx.fillStyle = this.figureColor
+    this.grawFigure(this.ctx, this.logoFigure)
+  }
+
+  grawFigure(ctx, figure){
+    switch (figure) {
       case 'triangle':
-        this.canvasService.drawTriangle(this.ctx, 0, 0, 100, 100)
+        this.canvasService.drawTriangle(ctx, 0, 0, 100, 100)
       break
       case 'square':
-        this.canvasService.drawRect(this.ctx, 0, 0, 100, 100)
+        this.canvasService.drawRect(ctx, 0, 0, 100, 100)
       break
       case 'circle':
-        this.canvasService.drawCircle(this.ctx, 50, 50, 50, 0, 2*Math.PI)
+        this.canvasService.drawCircle(ctx, 50, 50, 50, 0, 2*Math.PI)
       break
     }
   }

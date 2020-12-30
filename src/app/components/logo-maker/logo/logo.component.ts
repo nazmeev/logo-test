@@ -4,6 +4,8 @@ import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { Logo } from '../../../interfaces/logo.interface';
 import { DbService } from '../../../services/db.service';
 import { FontsLink } from '../../../shared/enum/fontslink.enum';
+import {switchMap} from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-logo',
@@ -15,6 +17,8 @@ export class LogoComponent implements OnInit {
   btnName: string
   formTitle: string
   fontsList: {}
+  figures: any
+  loaded: boolean = false
 
   constructor(
     private router: Router,
@@ -22,22 +26,23 @@ export class LogoComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute
   ) {
+    this.initForm()
+    this.getLogoId()
+    this.getFontsList()
+    this.setTemplateVariables()
+  }
+
+  ngOnInit(): void {
+    this.loadData()
+  }
+
+  initForm(){
     this.logoForm = this.formBuilder.group({
       text: ['', [Validators.required, Validators.maxLength(50)]],
       figure: ['', [Validators.required]],
       font: ['', [Validators.required]]
     })
-    this.route.params.subscribe(params => {
-      this.logoId = params.id
-    })
-    this.fontsList = Object.keys(FontsLink)
   }
-
-  ngOnInit(): void {
-    this.setTemplateVariables()
-    this.getLogo()
-  }
-
   get text() {
     return this.logoForm.get('text')
   }
@@ -48,16 +53,24 @@ export class LogoComponent implements OnInit {
     return this.logoForm.get('font')
   }
 
-  getLogo() {
-    this.dbService.getDataById(this.logoId, 'logos').subscribe(
-      resp => {
-        if (resp) {
-          this.logoForm.controls['text'].setValue(resp.text)
-          this.logoForm.controls['figure'].setValue(resp.figure)
-          this.logoForm.controls['font'].setValue(resp.font)
-        }
-      }
-    )
+  getLogoId(){
+    this.route.params.subscribe(params => {
+      this.logoId = params.id
+    })
+  }
+  loadData() {
+    this.dbService.getDataById(this.logoId, 'logos').pipe(
+      switchMap((logo: Logo) => {
+        this.setFormValues(logo)
+        return this.dbService.getAllData('figures')
+      }),
+      switchMap((figures: any) => {
+        this.figures = figures
+        return of(true)
+      })
+    ).subscribe((loaded: boolean) => {
+      this.loaded = loaded
+    })
   }
   saveLogo() {
     if (this.logoForm.status == "VALID") {
@@ -68,14 +81,14 @@ export class LogoComponent implements OnInit {
 
   updateLogo(data: Logo) {
     this.dbService.updateData(this.logoId, data, 'logos').then(
-      () => this.redirectAlert('Updated', 'alert-success')
+      () => this.redirectAlertVariables('Updated', 'alert-success')
     )
   }
   createLogo(data: Logo) {
     this.dbService.createData('id', data, 'logos').then(
       resp => {
         this.dbService.updateData(resp['id'], resp, 'logos').then(
-          () => this.redirectAlert('Saved', 'alert-success')
+          () => this.redirectAlertVariables('Saved', 'alert-success')
         )
       }
     )
@@ -91,8 +104,17 @@ export class LogoComponent implements OnInit {
     }
   }
 
-  redirectAlert(alertText, alertType) {
+  redirectAlertVariables(alertText, alertType) {
     const navigationExtras: NavigationExtras = { state: { data: alertText, type: alertType } }
     this.router.navigate(['/'], navigationExtras)
+  }
+
+  getFontsList(){
+    this.fontsList = Object.keys(FontsLink)
+  }
+  setFormValues(logo){
+    this.logoForm.controls['text'].setValue(logo.text)
+          this.logoForm.controls['figure'].setValue(logo.figure)
+          this.logoForm.controls['font'].setValue(logo.font)
   }
 }

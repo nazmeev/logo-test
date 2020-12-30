@@ -9,8 +9,8 @@ export class DbService {
 
   constructor(private firestore: AngularFirestore) { }
 
-	getAllData(): Observable<any> {
-		return this.firestore.collection('logos').valueChanges()
+	getAllData(table): Observable<any> {
+		return this.firestore.collection(table).valueChanges()
 	}
 	createData(primaryKey, data: {}, table: string): Promise<{}> {
 		return this.firestore
